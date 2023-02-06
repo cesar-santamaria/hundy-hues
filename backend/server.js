@@ -2,7 +2,7 @@ import express from "express";
 import morgan from "morgan";
 
 const app = express();
-const port = 8000;
+const port = 5432;
 
 app.use(morgan("dev"));
 
