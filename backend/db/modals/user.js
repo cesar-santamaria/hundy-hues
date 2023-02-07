@@ -27,3 +27,17 @@ async function createUser({ firstName, lastName, email, password, isAdmin }) {
     throw error;
   }
 }
+
+async function getAllUsers() {
+  /* this adapter should fetch a list of users from your db */
+  try {
+    const { rows } = await client.query(`
+      SELECT *
+      FROM users;
+    `);
+
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
