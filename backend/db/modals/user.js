@@ -1,4 +1,4 @@
-// grab our db client connection to use with our adapters
+// grab db client connection to use with adapters
 const client = require("../client");
 const bcrypt = require("bcrypt");
 const SALT_COUNT = 10;
@@ -29,7 +29,7 @@ async function createUser({ firstName, lastName, email, password, isAdmin }) {
 }
 
 async function getAllUsers() {
-  /* this adapter should fetch a list of users from your db */
+  /* this adapter should fetch a list of users from db */
   try {
     const { rows } = await client.query(`
       SELECT *
@@ -37,6 +37,43 @@ async function getAllUsers() {
     `);
 
     return rows;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getUserById(id) {
+  /* this adapter should fetch a specific user from db */
+  try {
+    const {
+      rows: [user],
+    } = await client.query(`
+      SELECT *
+      FROM users
+      WHERE id=${id};
+    `);
+    delete user.password;
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getUserByEmail(email) {
+  try {
+    console.log("Email from function: ", email);
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+      SELECT *
+      FROM users
+      WHERE email=$1;
+    `,
+      [email]
+    );
+    // Do not send the password
+    return user;
   } catch (error) {
     throw error;
   }
