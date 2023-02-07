@@ -97,3 +97,25 @@ async function updateUser({ id, ...fields }) {
   );
   return user;
 }
+
+async function deleteUser(id) {
+  await client.query(`
+  DELETE FROM users WHERE id=${id};
+  `);
+  const {
+    rows: [user],
+  } = await client.query(`
+  DELETE FROM users WHERE id=${id}
+  RETURNING *;
+  `);
+  return user;
+}
+
+module.exports = {
+  getAllUsers,
+  createUser,
+  updateUser,
+  deleteUser,
+  getUserById,
+  getUserByEmail,
+};
