@@ -13,6 +13,4 @@ const pool = new Pool(config);
 
 pool.connect();
 
-pool.query(`SELECT * FROM `);
-
 module.exports = pool;
