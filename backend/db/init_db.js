@@ -86,9 +86,9 @@ async function populateInitialData() {
   console.log("Starting to create users...");
   try {
     await createUser({
-      firstName: "Ulysses",
-      lastName: "Cortes",
-      email: "uly@gmail.com",
+      firstName: "Cesar",
+      lastName: "Santamaria",
+      email: "cesarsanta@gmail.com",
       password: "123456789",
       isAdmin: true,
     });
