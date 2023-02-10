@@ -1,16 +1,11 @@
-const { Pool } = require("pg");
-require("dotenv").config();
+import client from "./client";
 
-const config = {
-  port: process.env.DB_PORT,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+export default {
+  client,
+  ...require("./modals/product"),
+  ...require("./modals/order"),
+  ...require("./modals/review"),
+  ...require("./modals/order-items"),
+  ...require("./modals/user"),
+  ...require("./modals/favorite"),
 };
-
-const pool = new Pool(config);
-
-pool.connect();
-
-module.exports = pool;
