@@ -7,7 +7,6 @@ import { products } from "./productList.json";
 async function buildTables() {
   try {
     console.log("Starting to build tables...");
-    // client.connect();
 
     await query(`
             DROP TABLE IF EXISTS order_items;
