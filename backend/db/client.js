@@ -1,16 +1,16 @@
-import { Pool } from "pg";
+const { Pool } = require("pg");
 require("dotenv").config();
 
-const config = {
-  port: process.env.DB_PORT,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-};
+const DB_HOST = process.env.DB_HOST;
+const DB_NAME = process.env.DB_NAME;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
 
-const pool = new Pool(config);
+const pool = new Pool({
+  connectionString: `postgres://${DB_NAME}:${DB_PASSWORD}@${DB_HOST}/${DB_USER}`,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 
-pool.connect();
-
-export default pool;
+module.exports = pool;
