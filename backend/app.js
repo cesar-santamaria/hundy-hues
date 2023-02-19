@@ -1,17 +1,17 @@
 require("dotenv").config();
 
-import express, { json } from "express";
+const express = require("express");
 const app = express();
 
-import { connect } from "./db/client";
-connect();
+const client = require("./db/client");
+client.connect();
 
-import cors from "cors";
+const cors = require("cors");
 app.use(cors());
 
-app.use(json());
+app.use(express.json());
 
-import morgan from "morgan";
+const morgan = require("morgan");
 app.use(morgan("dev"));
 
 app.use((req, res, next) => {
@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 });
 
 // Setup your Middleware and API Router here
-import apiRouter from "./api";
+const apiRouter = require("./api");
 app.use("/api", apiRouter);
 
 //error handler
@@ -31,4 +31,4 @@ app.get("/api/unknown", (req, res) => {
   res.status(404).send({ message: "The endpoint could not be found." });
 });
 
-export default app;
+module.exports = app;
