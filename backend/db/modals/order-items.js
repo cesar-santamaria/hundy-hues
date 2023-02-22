@@ -1,78 +1,87 @@
-const express = require("express");
-const apiRouter = express.Router();
+// grab our db client connection to use with our adapters
+const client = require("../client");
 
-const {
-    getAllOrderItems,
-    addProductOrder,
-    deleteOrderItem,
-    updateOrderItem,
-    getOrderItemsByOrderId
-} = require('../db');
+async function addProductOrder({ orderId, productId, quantity }) {
+  try {
+    const {
+      rows: [orderItem],
+    } = await client.query(
+      `
+        INSERT INTO order_items("orderId", "productId", quantity)
+        VALUES($1, $2, $3)
+        RETURNING *;
+      `,
+      [orderId, productId, quantity]
+    );
 
-apiRouter.get("/", async (req, res, next) => {
-    try {
-        const orderItems = await getAllOrderItems();
-        res.send(orderItems);
-    } catch (error) {
-        next(error);
-    }
-});
+    return orderItem;
+  } catch (error) {
+    console.error(error);
+  }
+}
 
-apiRouter.post("/:orderId", async (req, res, next) => {
-    const { orderId } = req.params;
-    const { productId, quantity } = req.body;
+async function getAllOrderItems() {
+  try {
+    const { rows } = await client.query(`
+      SELECT * 
+       FROM order_items;
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
 
-    try {
-        const newOrderItem = await addProductOrder({
-            orderId,
-            productId,
-            quantity,
-        });
-        res.status(201).json(newOrderItem);
-    } catch (error) {
-        next(error);
-    }
-});
+async function getOrderItemsByOrderId(orderId) {
+  try {
+    const { rows } = await client.query(
+      `
+        SELECT * 
+        FROM order_items
+        WHERE "orderId" = $1;
+        `,
+      [orderId]
+    );
 
-apiRouter.get("/:orderId", async (req, res, next) => {
-    try {
-        const { orderId } = req.params;
-        const orderItems = await getOrderItemsByOrderId(orderId);
-        res.send(orderItems);
-    } catch (error) {
-        next(error);
-    }
-});
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
 
-apiRouter.patch("/:orderItemId", async (req, res, next) => {
-    try {
-        const id = req.params.orderItemId;
-        const { quantity } = req.body;
-        const updatedFields = { id: id };
-        if (quantity) {
-            updatedFields.quantity = quantity;
-        }
-        const updatedOrderItem = await updateOrderItem(updatedFields);
+async function updateOrderItem({ id, ...fields }) {
+  const setString = Object.keys(fields)
+    .map((key, index) => `"${key}"=$${index + 1}`)
+    .join(", ");
 
-        res.send(updatedOrderItem);
-    } catch (error) {
-        next(error);
-    }
-});
+  const {
+    rows: [order],
+  } = await client.query(
+    `
+    UPDATE order_items
+    SET ${setString}
+    WHERE id=${id}
+    RETURNING *;
+    `,
+    Object.values(fields)
+  );
+  return order;
+}
 
-apiRouter.delete("/:productId", async (req, res, next) => {
-    const { productId } = req.params;
-    console.log(productId);
-    try {
-        const destroyedOrderItem = await deleteOrderItem(productId);
-        const response = {
-            message: 'Item deleted successfully',
-            orderItem: destroyedOrderItem
-        };
-        res.status(200).json(response);
-    } catch (error) {
-        next(error);
-    }
-});
+async function deleteOrderItem(productId) {
+  const {
+    rows: [orderItem],
+  } = await client.query(`DELETE FROM order_items WHERE "productId"=$1;`, [
+    productId,
+  ]);
 
-module.exports = apiRouter;
+  return orderItem;
+}
+
+module.exports = {
+  addProductOrder,
+  getAllOrderItems,
+  getOrderItemsByOrderId,
+  updateOrderItem,
+  deleteOrderItem,
+};
