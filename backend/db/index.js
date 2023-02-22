@@ -1,6 +1,6 @@
-import client from "./client";
+const client = require("./client");
 
-export default {
+module.exports = {
   client,
   ...require("./modals/product"),
   ...require("./modals/order"),

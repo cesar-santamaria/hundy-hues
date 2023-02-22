@@ -1,57 +1,67 @@
-const express = require("express");
-const apiRouter = express.Router();
-const { requireUser } = require("./utils");
+const client = require("../client");
 
-const {
-    addToFavorite,
-    getFavoriteByUserId,
-    deleteFavorite,
-    getFavoriteProducts
-} = require('../db');
+async function addToFavorite(userId, productId) {
+  try {
+    const {
+      rows: [favorite],
+    } = await client.query(
+      `
+          INSERT INTO favorite ("userId", "productId")
+          VALUES ($1, $2)
+          RETURNING *
+        `,
+      [userId, productId]
+    );
+    return favorite;
+  } catch (error) {
+    throw error;
+  }
+}
 
-apiRouter.get("/", requireUser, async (req, res, next) => {
-    const userId = req.user.id
+async function getFavoriteProducts(userId) {
+  try {
+    const { rows } = await client.query(
+      `
+        SELECT p.id, p.title, p.price, p.images[1] AS image
+        FROM favorite f
+        JOIN products p ON f."productId" = p.id
+        WHERE f."userId" = $1;
+      `,
+      [userId]
+    );
+    return rows;
+  } catch (error) {
+    console.error("Error executing query:", error);
+    throw error;
+  }
+}
 
-    try {
-        const usersOrders = await getFavoriteByUserId(userId);
-        res.send(usersOrders);
-    } catch (error) {
-        next(error);
-    }
-});
+async function getFavoriteByUserId(userId) {
+  try {
+    const { rows } = await client.query(`
+        SELECT * 
+        FROM favorite
+        WHERE "userId"=${userId};
+      `);
 
-apiRouter.post("/:productId", requireUser, async (req, res, next) => {
-    const { productId } = req.params;
-    const userId = req.user.id
-    try {
-        const newOrder = await addToFavorite(userId, productId);
-        res.send(newOrder);
-    } catch (error) {
-        next(error);
-    }
-});
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+}
 
+async function deleteFavorite(productId) {
+  const {
+    rows: [favorite],
+  } = await client.query(`DELETE FROM favorite WHERE "productId"=$1;`, [
+    productId,
+  ]);
+  return favorite;
+}
 
-apiRouter.get('/myFavorites', requireUser, async (req, res) => {
-    try {
-        const userId = req.user.id;
-        const favoriteProducts = await getFavoriteProducts(userId);
-        res.json(favoriteProducts);
-    } catch (error) {
-        console.error('Error retrieving favorite products:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-apiRouter.delete("/:productId", async (req, res, next) => {
-    const { productId } = req.params;
-    // on the front end control if favorite then on click delete 
-    try {
-        const destroy = await deleteFavorite(productId);
-        res.send(destroy);
-    } catch (error) {
-        next(error);
-    }
-});
-
-module.exports = apiRouter;
+module.exports = {
+  addToFavorite,
+  getFavoriteByUserId,
+  deleteFavorite,
+  getFavoriteProducts,
+};
