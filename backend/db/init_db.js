@@ -1,14 +1,15 @@
 // const { client } = require("./index.js");
-import { query, end } from "../db/client";
-import { createUser, createProduct } from "../db";
+const client = require("../db/client");
+const { createUser, createProduct } = require("../db");
 
-import { products } from "./productList.json";
+const { products } = require("./productList.json");
 
 async function buildTables() {
   try {
     console.log("Starting to build tables...");
+    // client.connect();
 
-    await query(`
+    await client.query(`
             DROP TABLE IF EXISTS order_items;
             DROP TABLE IF EXISTS orders;
             DROP TABLE IF EXISTS reviews;
@@ -17,7 +18,7 @@ async function buildTables() {
             DROP TABLE IF EXISTS users CASCADE;
         `);
 
-    await query(`
+    await client.query(`
         CREATE TABLE IF NOT EXISTS products (
             id SERIAL PRIMARY KEY,
             title varchar(255) NOT NULL,
@@ -87,27 +88,23 @@ async function populateInitialData() {
     await createUser({
       firstName: "Cesar",
       lastName: "Santamaria",
-      email: "cesarsanta@gmail.com",
+      email: "ces@gmail.com",
       password: "123456789",
       isAdmin: true,
     });
     console.log("User created successfully!");
 
     console.log("Starting to create Products...");
-
-    await Promise.all(
-      products.map(async (product) => {
-        await createProduct(product);
-      })
-    );
-
+    for (const product of products) {
+      await createProduct(product);
+    }
     console.log("Products created successfully!");
   } catch (error) {
-    console.error("Error creating user!");
-    throw error;
+    console.error("Error creating user or products!");
+    console.error(error);
   }
 }
 buildTables()
   .then(populateInitialData)
   .catch(console.error)
-  .finally(() => end());
+  .finally(() => client.end());
