@@ -1,10 +1,10 @@
-import { query } from "../client";
+const client = require("../client");
 
 async function createOrder(userId) {
   try {
     const {
       rows: [order],
-    } = await query(
+    } = await client.query(
       `
       INSERT INTO orders("userId") 
       VALUES($1) 
@@ -20,7 +20,7 @@ async function createOrder(userId) {
 
 async function getOrderDetails(userId) {
   try {
-    const { rows } = await query(`
+    const { rows } = await client.query(`
         SELECT o.id AS order_id, o."orderDate", o."isCheckedOut", o."checkoutDate", o."checkoutSum",
           oi.quantity, p.id AS "productId", p.title, p.price, p.images[1] AS image, p."stripePrice"
         FROM orders o
@@ -81,7 +81,7 @@ async function getOrderDetails(userId) {
 
 async function getCart(userId) {
   try {
-    const { rows } = await query(
+    const { rows } = await client.query(
       `
         SELECT oi.id AS "orderItemId", o.id AS order_id, o."isCheckedOut",
           oi.quantity, p.id AS "productId", p.title, p.price, p."stripePrice" ,p.images[1] AS image
@@ -102,7 +102,7 @@ async function getCart(userId) {
 
 async function getAllOrders() {
   try {
-    const { rows } = await query(`
+    const { rows } = await client.query(`
       SELECT * 
       FROM orders;
     `);
@@ -114,7 +114,7 @@ async function getAllOrders() {
 
 async function getOrderById(id) {
   try {
-    const { rows } = await query(`
+    const { rows } = await client.query(`
       SELECT * 
       FROM orders
       WHERE id=${id};
@@ -128,7 +128,7 @@ async function getOrderById(id) {
 
 async function getOrderByUserId(userId) {
   try {
-    const { rows } = await query(`
+    const { rows } = await client.query(`
         SELECT * 
         FROM orders
         WHERE "userId"=${userId} AND "isCheckedOut"=false;
@@ -141,7 +141,7 @@ async function getOrderByUserId(userId) {
 }
 async function getOrderCheckoutByUserId(userId) {
   try {
-    const { rows } = await query(`
+    const { rows } = await client.query(`
         SELECT * 
         FROM orders
         WHERE "userId"=${userId} AND "isCheckedOut"=true;
@@ -160,7 +160,7 @@ async function updateOrders({ id, ...fields }) {
 
   const {
     rows: [order],
-  } = await query(
+  } = await client.query(
     `
   UPDATE orders
   SET ${setString}
@@ -173,19 +173,19 @@ async function updateOrders({ id, ...fields }) {
 }
 
 async function deleteOrder(id) {
-  await query(`
+  await client.query(`
   DELETE FROM order_items WHERE "orderId"=${id};
   `);
   const {
     rows: [order],
-  } = await query(`
+  } = await client.query(`
   DELETE FROM orders WHERE id=${id}
   RETURNING *;
   `);
   return order;
 }
 
-export default {
+module.exports = {
   createOrder,
   getAllOrders,
   getOrderByUserId,
