@@ -1,33 +1,43 @@
-const express = require('express');
-const apiRouter = express.Router();
-const { requireUser } = require('./utils');
+const client = require("../client");
 
-const {
-    getReviewsByProductId,
-    createReview
-} = require('../db');
+async function getReviewsByProductId(productId) {
+  try {
+    const { rows: reviews } = await client.query(
+      `
+      SELECT *
+      FROM reviews
+      WHERE "productId" = $1
+    `,
+      [productId]
+    );
 
-apiRouter.get('/:productId', async (req, res, next) => {
-    const { productId } = req.params;
-    try {
-        const reviews = await getReviewsByProductId(productId);
-        res.send(reviews);
-    } catch (error) {
-        next(error);
-    }
-});
+    return reviews;
+  } catch (error) {
+    throw error;
+  }
+}
 
-apiRouter.post('/:productId', requireUser, async (req, res, next) => {
-    const { productId } = req.params;
-    const { title, description, rating } = req.body;
-    const userId = req.user.id;
+// Create a new review for a product
+async function createReview({ productId, userId, title, description, rating }) {
+  try {
+    const {
+      rows: [review],
+    } = await client.query(
+      `
+      INSERT INTO reviews ("productId", "userId", title, description, rating)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *
+    `,
+      [productId, userId, title, description, rating]
+    );
 
-    try {
-        const review = await createReview({ productId, userId, title, description, rating });
-        res.send(review);
-    } catch (error) {
-        next(error);
-    }
-});
+    return review;
+  } catch (error) {
+    throw error;
+  }
+}
 
-module.exports = apiRouter;
+module.exports = {
+  getReviewsByProductId,
+  createReview,
+};
