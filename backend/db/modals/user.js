@@ -1,14 +1,14 @@
-// grab db client connection to use with adapters
-import { query } from "../client";
-import { hash } from "bcrypt";
+// grab our db client connection to use with our adapters
+const client = require("../client");
+const bcrypt = require("bcrypt");
 const SALT_COUNT = 10;
 
 async function createUser({ firstName, lastName, email, password, isAdmin }) {
-  const hashedPassword = await hash(password, SALT_COUNT);
+  const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
   try {
     const {
       rows: [user],
-    } = await query(
+    } = await client.query(
       `
         INSERT INTO users("firstName", "lastName", email, password, "isAdmin") 
         VALUES($1, $2, $3, $4, $5) 
@@ -21,7 +21,6 @@ async function createUser({ firstName, lastName, email, password, isAdmin }) {
     if (user) {
       delete user.password;
     }
-
     return user;
   } catch (error) {
     throw error;
@@ -29,9 +28,9 @@ async function createUser({ firstName, lastName, email, password, isAdmin }) {
 }
 
 async function getAllUsers() {
-  /* this adapter should fetch a list of users from db */
+  /* this adapter should fetch a list of users from your db */
   try {
-    const { rows } = await query(`
+    const { rows } = await client.query(`
       SELECT *
       FROM users;
     `);
@@ -43,11 +42,11 @@ async function getAllUsers() {
 }
 
 async function getUserById(id) {
-  /* this adapter should fetch a specific user from db */
+  /* this adapter should fetch a specific user from your db */
   try {
     const {
       rows: [user],
-    } = await query(`
+    } = await client.query(`
       SELECT *
       FROM users
       WHERE id=${id};
@@ -58,13 +57,12 @@ async function getUserById(id) {
     throw error;
   }
 }
-
 async function getUserByEmail(email) {
   try {
     console.log("Email from function: ", email);
     const {
       rows: [user],
-    } = await query(
+    } = await client.query(
       `
       SELECT *
       FROM users
@@ -86,7 +84,7 @@ async function updateUser({ id, ...fields }) {
 
   const {
     rows: [user],
-  } = await query(
+  } = await client.query(
     `
   UPDATE users
   SET ${setString}
@@ -99,19 +97,20 @@ async function updateUser({ id, ...fields }) {
 }
 
 async function deleteUser(id) {
-  await query(`
+  await client.query(`
   DELETE FROM users WHERE id=${id};
   `);
   const {
     rows: [user],
-  } = await query(`
+  } = await client.query(`
   DELETE FROM users WHERE id=${id}
   RETURNING *;
   `);
   return user;
 }
 
-export default {
+module.exports = {
+  // add your database adapter functions here
   getAllUsers,
   createUser,
   updateUser,
