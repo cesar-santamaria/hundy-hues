@@ -1,4 +1,4 @@
-import { query } from "../client";
+const client = require("../client");
 
 async function createProduct({
   title,
@@ -15,7 +15,7 @@ async function createProduct({
   try {
     const {
       rows: [product],
-    } = await query(
+    } = await client.query(
       `
             INSERT INTO products(title, description, price, quantity, category,type, images, dimensions, features, "stripePrice") 
             VALUES($1, $2, $3, $4, $5, $6, $7, $8 ,$9, $10) 
@@ -43,7 +43,7 @@ async function createProduct({
 
 async function getAllProducts() {
   try {
-    const { rows } = await query(`
+    const { rows } = await client.query(`
       SELECT id, title, description, price, quantity, category, type, images, dimensions, features, "stripePrice"
       FROM products;
     `);
@@ -56,7 +56,7 @@ async function getAllProducts() {
 
 async function getAllProductsFavorite(userId) {
   try {
-    const { rows } = await query(
+    const { rows } = await client.query(
       `
         SELECT p.*, 
           CASE WHEN f."productId" IS NOT NULL THEN true ELSE false END AS "isFavorite"
@@ -74,7 +74,7 @@ async function getAllProductsFavorite(userId) {
 
 async function getProductById(id) {
   try {
-    const { rows } = await query(`
+    const { rows } = await client.query(`
       SELECT id, title, description, price, quantity, category, type,images, dimensions, features, "stripePrice"
       FROM products
       WHERE id=${id};
@@ -87,7 +87,7 @@ async function getProductById(id) {
 }
 async function getProductByUserId(userId, productId) {
   try {
-    const { rows } = await query(
+    const { rows } = await client.query(
       `
             SELECT p.*, 
               CASE WHEN f."productId" IS NOT NULL THEN true ELSE false END AS "isFavorite"
@@ -112,7 +112,7 @@ async function updateProducts({ id, ...fields }) {
 
   const {
     rows: [product],
-  } = await query(
+  } = await client.query(
     `
   UPDATE products
   SET ${setString}
@@ -125,13 +125,13 @@ async function updateProducts({ id, ...fields }) {
 }
 
 async function deleteProduct(id) {
-  await query(`
+  await client.query(`
   DELETE FROM orders WHERE productId=${id}
   `);
 
   const {
     rows: [product],
-  } = await query(
+  } = await client.query(
     `
   DELETE FROM products WHERE id=$1;
   `,
@@ -140,7 +140,7 @@ async function deleteProduct(id) {
   return product;
 }
 
-export default {
+module.exports = {
   createProduct,
   getAllProducts,
   updateProducts,
