@@ -10,7 +10,7 @@ client
   .connect()
   .then(() => {
     app.listen(port, () => {
-      console.log("App is listening on port ${port} 🙉", port);
+      console.log(`App is listening on port: ${port} 🙉`);
     });
   })
   .catch((error) => {
