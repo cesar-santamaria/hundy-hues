@@ -5,7 +5,7 @@
       display: flex;
       height: 420px;
       border-radius: 20px;
-      background-image: url("../assets/images/banner.jpg");
+      background-image: url("/assets/banner.jpg");
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
@@ -315,19 +315,19 @@
   }
 
   .benefitImg1 {
-      background-image: url("../assets/images/click.png");
+      background-image: url("/assets/click.png");
   }
 
   .benefitImg2 {
-      background-image: url("../assets/images/shiping.png");
+      background-image: url("/assets/shipping.png");
   }
 
   .benefitImg3 {
-      background-image: url("../assets/images/card.png");
+      background-image: url("/assets/card.png");
   }
 
   .benefitImg4 {
-      background-image: url("../assets/images/contact.png");
+      background-image: url("/assets/contact.png");
   }
 
   @media only screen and (max-width: 1200px) {

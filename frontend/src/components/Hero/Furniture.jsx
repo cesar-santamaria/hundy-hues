@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { useState } from "react";
 import VisibilitySensor from "react-visibility-sensor";
-import upRightArrow from '../../assets/images/upRightArrow.png'
+import upRightArrow from '/assets/upRightArrow.png'
 import { furniturePopUp } from '../../assets/FramerAnimations/HeroAnimations';
 
 export default function Furniture({ setFilterName }) {

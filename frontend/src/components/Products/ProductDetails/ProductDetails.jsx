@@ -246,7 +246,7 @@ export default function ProductDetails({ API_URL, user, token, currentOrderId, s
                             {displayDescription && <Description description={productInfo.description} />}
                         </section>
 
-                        <div className='shiping'
+                        <div className='shipping'
                             onClick={() => { setDisplayShipping(!displayShipping) }}>
                             <p className='otherFont'>Shipping and Return</p>
                             <p className="plus">{!displayShipping ? "+" : "-"}</p>

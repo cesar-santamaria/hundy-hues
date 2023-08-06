@@ -1,7 +1,7 @@
-import clickImg from "../../assets/images/click.png"
-import shippingImg from "../../assets/images/shiping.png"
-import payImg from "../../assets/images/card.png"
-import contact from "../../assets/images/contact.png"
+import clickImg from "/assets/click.png"
+import shippingImg from "/assets/shipping.png"
+import payImg from "/assets/card.png"
+import contact from "/assets/contact.png"
 
 export default function Benefits() {
     return (

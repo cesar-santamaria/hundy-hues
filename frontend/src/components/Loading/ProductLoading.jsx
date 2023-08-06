@@ -37,7 +37,7 @@ export default function ProductLoading() {
                         <div className="features divLoading shinny"></div>
                         <div className="dimensions divLoading shinny"></div>
                         <div className="description divLoading shinny"></div>
-                        <div className='shiping divLoading shinny'></div>
+                        <div className='shipping divLoading shinny'></div>
                     </div>
                 </section >
             </div >

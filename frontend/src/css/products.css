@@ -102,7 +102,7 @@
 .heartIcon {
     width: 30px;
     height: 30px;
-    background-image: url("../assets/images/heart.png");
+    background-image: url("/assets/heart.png");
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -112,7 +112,7 @@
 .redHeartIcon {
     width: 30px;
     height: 30px;
-    background-image: url("../assets/images/greyHeart.png");
+    background-image: url("/assets/greyHeart.png");
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -120,7 +120,7 @@
 }
 
 .heartIcon:hover {
-    background-image: url("../assets/images/greyHeart.png");
+    background-image: url("/assets/greyHeart.png");
 }
 
 .hideMe {
@@ -196,16 +196,6 @@
     height: 100px;
     width: 100px;
 }
-
-/* .orderHisImg {
-    height: 700px;
-    width: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-image: url("../assets/images/favImg.jpg");
-} */
-
 
 
 /* STAR RATING */
@@ -371,7 +361,7 @@
 }
 
 .features,
-.shiping,
+.shipping,
 .dimensions,
 .description {
     display: flex;
@@ -393,7 +383,7 @@
     border-top: none;
 }
 
-.shiping {
+.shipping {
     border-top: none;
 }
 

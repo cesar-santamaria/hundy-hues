@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import arrow from '../../../assets/images/imgArr.png'
+import arrow from '/assets/imgArr.png'
 
 const variants = {
     enter: (direction) => {
