@@ -4,7 +4,6 @@
   .banner {
       display: flex;
       height: 420px;
-      object-fit: contain;
       border-radius: 20px;
       background-image: url("../assets/images/banner.jpg");
       background-repeat: no-repeat;
@@ -81,8 +80,8 @@
   .furnitureComponent {
       display: flex;
       flex-direction: column;
-      margin-top: 40px;
-      gap: 60px;
+      margin-top: 60px;
+      gap: 30px;
   }
 
   .topFurniture {
@@ -150,7 +149,7 @@
   }
 
   .furnitureCardImg {
-      height: 450px;
+      height: 350px;
       width: 320px;
       border-radius: 10px;
       background-repeat: no-repeat;
@@ -285,7 +284,7 @@
   .benefitsStripe {
       display: flex;
       justify-content: space-evenly;
-      height: 160px;
+      height: 100px;
       margin: 100px 0 100px 0;
   }
 

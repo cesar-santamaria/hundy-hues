@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 120px;
+    height: 100px;
     overflow: hidden;
 }
 
@@ -27,7 +27,7 @@
     margin-left: 70px;
     font-size: 16px;
     height: 40px;
-    gap: 30px;
+    gap: 25px;
     cursor: pointer;
     color: #2f2f2f;
     list-style: none;
