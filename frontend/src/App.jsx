@@ -16,7 +16,7 @@ import NotFound from './components/NotFound';
 import Success from './components/Products/Cart/Success';
 
 const App = () => {
-  const API_URL = "https://hundy-hues-frontend.onrender.com/api/";
+  const API_URL = "https://hundyhues-api.onrender.com/api/";
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [token, setToken] = useState("")
   const [user, setUser] = useState("")
