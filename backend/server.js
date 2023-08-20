@@ -2,8 +2,10 @@ const app = require("./app");
 const client = require("./db/client");
 const morgan = require("morgan");
 const cors = require("cors");
+require("dotenv").config();
 
-const port = 5432;
+const PORT = process.env.PORT || 5432;
+console.log(process.env.PORT);
 
 app.use(morgan("dev"));
 
@@ -19,8 +21,8 @@ app.use(
 client
   .connect()
   .then(() => {
-    app.listen(port, () => {
-      console.log(`App is listening on port: ${port} 🙉`);
+    app.listen(PORT, () => {
+      console.log(`App is listening on port: ${PORT} 🙉`);
     });
   })
   .catch((error) => {
