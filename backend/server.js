@@ -5,7 +5,6 @@ const cors = require("cors");
 require("dotenv").config();
 
 const PORT = process.env.PORT || 5432;
-console.log(process.env.PORT);
 
 app.use(morgan("dev"));
 
