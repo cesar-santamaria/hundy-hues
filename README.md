@@ -2,7 +2,7 @@
 
 Hundy Hues is an innovative ecommerce platform that offers a curated collection of stylish furniture and home decor products. Transforming houses into homes by providing unique and functional pieces that reflect your personal style. Hundy Hues brings you a user friendly shopping experience to help you create spaces that truly feel like your own.
 
-**Link to project:** https://hundy-hues-frontend.onrender.com/
+**Link to project:** [https://hundy-hues-frontend.onrender.com/](https://hundy-hues-frontend.onrender.com)
 
 ![Login screen](./docs/login.png)
 ![Dashboard](./docs/homepage.png)
