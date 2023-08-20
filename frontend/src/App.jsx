@@ -16,7 +16,7 @@ import NotFound from './components/NotFound';
 import Success from './components/Products/Cart/Success';
 
 const App = () => {
-  const API_URL = "https://digital-depot.onrender.com/api/";
+  const API_URL = "https://hundy-hues-production.up.railway.app/api/";
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [token, setToken] = useState("")
   const [user, setUser] = useState("")
